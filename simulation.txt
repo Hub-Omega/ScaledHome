@@ -1,0 +1,78 @@
+* MORNING PHASE *
+* start appliances to get to target temp
+lamp on
+* person wakes up and opens windows in bed2
+wb2r open 1
+wb2b open 3
+motor1_p1 off motor1_p2 off motor2_p1 off motor2_p2 off 86
+* person goes from bed2 to bath to living rm and opens windows in living rm
+motor1_p1 off motor1_p2 on motor2_p1 on motor2_p2 off 1.5
+motor1_p1 off motor1_p2 off motor2_p1 off motor2_p2 off 1
+db2b open 1
+db2b close 5
+dlb open 1
+dlb close 3
+wll open 2
+wlf open 4
+motor1_p1 off motor1_p2 off motor2_p1 off motor2_p2 off 73
+* person goes to kitchen to eat then comes out and closes living rm windows
+motor1_p1 off motor1_p2 on motor2_p1 on motor2_p2 off 1.5
+motor1_p1 off motor1_p2 off motor2_p1 off motor2_p2 off 1
+dlk open 1
+dlk close 15
+dlk open 1
+dlk close 3
+wlf close 3 
+wll close 4
+motor1_p1 off motor1_p2 off motor2_p1 off motor2_p2 off 62
+* person goes back to bed 2 thru the bath and closes windows
+motor1_p1 off motor1_p2 on motor2_p1 on motor2_p2 off 1.5
+motor1_p1 off motor1_p2 off motor2_p1 off motor2_p2 off 1
+dlb open 1
+db2b open 3
+wb2r close 1
+wb2b close 3
+motor1_p1 off motor1_p2 off motor2_p1 off motor2_p2 off 81
+* person walks back out of bed 2 and bath and leaves house
+motor1_p1 off motor1_p2 on motor2_p1 on motor2_p2 off 1.5
+motor1_p1 off motor1_p2 off motor2_p1 off motor2_p2 off 1
+db2b close 2
+dlb close 5
+dlo open 2
+dlo close 10
+motor1_p1 off motor1_p2 off motor2_p1 off motor2_p2 off 69
+* MID-DAY PHASE *
+* person comes back home and goes to drop their stuff in bed2
+motor1_p1 off motor1_p2 on motor2_p1 on motor2_p2 off 1.5
+motor1_p1 off motor1_p2 off motor2_p1 off motor2_p2 off 1
+dlo open 1
+dlo close 4
+dlb open 1
+db2b open 7
+db2b close 5
+motor1_p1 off motor1_p2 off motor2_p1 off motor2_p2 off 71
+* person goes thru bath and living rm to go to kitchen
+motor1_p1 off motor1_p2 on motor2_p1 on motor2_p2 off 1.5
+motor1_p1 off motor1_p2 off motor2_p1 off motor2_p2 off 1
+dlb open 1
+dlb close 7
+dlk open 1
+dlk close 15
+motor1_p1 off motor1_p2 off motor2_p1 off motor2_p2 off 65
+* person eats dinner in living rm and then puts dishes in kitchen
+motor1_p1 off motor1_p2 on motor2_p1 on motor2_p2 off 1.5
+motor1_p1 off motor1_p2 off motor2_p1 off motor2_p2 off 1
+dlk open 1
+dlk close 10
+dlk open 5 
+dlk close 3
+motor1_p1 off motor1_p2 off motor2_p1 off motor2_p2 off 70
+* person goes to bath then to sleep in bed2
+motor1_p1 off motor1_p2 on motor2_p1 on motor2_p2 off 1.5
+motor1_p1 off motor1_p2 off motor2_p1 off motor2_p2 off 1
+dlb open 1
+dlb close 4
+db2b open 1
+db2b close 3
+motor1_p1 off motor1_p2 off motor2_p1 off motor2_p2 off 80
+lamp off 0

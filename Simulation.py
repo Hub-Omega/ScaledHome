@@ -7,6 +7,7 @@ import csv
 import RPi.GPIO as GPIO
 from datetime import datetime
 from time import strftime
+from time import sleep
 import pdb
 
 kit = ServoKit(channels=16)
@@ -387,20 +388,9 @@ class ControlTower():
         print("\nEnd of simulation")
 
 
-    # **side project** This function will "build" the house using a textfile with
-    # the specifications of everything in it.
-    def buildHouse(house):
-        # make house object
-        # open build house text file
-        # make and add all appliances
-        # make and add all doors and windows
-        # make all rooms and add doors and windows to them
-        return house
-
-
-
     def main(self, filename):
-
+        en1=20
+        en2=17
         # *** BUILDING THE HOUSE ***
         # --appliances--
         # no nickname needed, just use regular name when writing the test file
@@ -408,7 +398,13 @@ class ControlTower():
         heater = Appliance("heater", 6)
         fan = Appliance("fan", 12)
         ac = Appliance("ac", 13)
-        applianceList = [lamp, heater, fan, ac]
+        motor1_p1 = Appliance("motor1_p1",19)
+        motor1_p2 = Appliance("motor1_p2",16)
+        motor1_en1 = Appliance("motor1_enable", en1)
+        motor2_p1 = Appliance("motor2_p1",25)
+        motor2_p2 = Appliance("motor2_p2",24)
+        motor2_en2 = Appliance("motor2_enable", en2)
+        applianceList = [lamp, heater, fan, ac, motor1_p1, motor1_p2, motor2_p1, motor2_p2,motor1_en1,motor2_en2]
 
         # --doors--
         # nicknaming convention: d + the initials of the door name. Example: db2b
@@ -446,41 +442,18 @@ class ControlTower():
         # --house--
         scaledHome = Home(roomList, applianceList, doorList, windowList)
 
-        # *** CONTROLLING THE HOUSE ***
-        #bed1_left.openHinge()
-        #time.sleep(5)
-        #bed1_left.closeHinge()
-
-        #fan.turnOn()
-        #time.sleep(5)
-        #lamp.turnOff()
-
-        #scaledHome.openEverything()
-        #time.sleep(5)
-        #scaledHome.closeEverything()
-
+        p1=GPIO.PWM(en1,1000)
+        p2=GPIO.PWM(en2,1000)
+        p1.start (30)
+        p2.start (30)
         self.readInstructions(scaledHome, filename)
-
-        #print(scaledHome.getDoors())
 
         # Make sure to have GPIO.cleanup() at the end of the program to reset
         # all of the appliances before the program terminates.
         GPIO.cleanup()
 
-
-
 if __name__ == "__main__":
-    inFile = "simulation1.txt"
+    inFile = "simulation.txt"
     outFile = "appliance_and_motor_states1.csv"
-
-    # inFile = "simulation2.txt"
-    # outFile = "appliance_and_motor_states2.csv"
-
-    # inFile = "simulation3.txt"
-    # outFile = "appliance_and_motor_states3.csv"
-
-    # inFile = "simulation4.txt"
-    # outFile = "appliance_and_motor_states4.csv"
-
     start = ControlTower()
     start.main(inFile, outFile)
