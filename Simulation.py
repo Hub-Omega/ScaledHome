@@ -7,7 +7,6 @@ import csv
 import RPi.GPIO as GPIO
 from datetime import datetime
 from time import strftime
-from time import sleep
 import pdb
 
 kit = ServoKit(channels=16)
@@ -27,7 +26,7 @@ class Home:
     # These next few functions returns a list of the names of the different
     # objects in the house. This is used later to create the column names
     # for the output csv file.
-    def getRooms(self)->list:
+    def getRooms(self):
         rL = []
         for r in self.rooms:
             rL.append(r.name)
@@ -76,6 +75,7 @@ class Home:
     # the rooms as they don't have states).
     def getStates(self):
         states = []
+        states.append(format(datetime.now(), '%H:%M:%S'))
         # get appliance states
         for a in self.appliances:
             states.append(a.getState())
@@ -242,7 +242,7 @@ class Hinge(Motor):
             self.closingAngle = 50
         elif self.pin == 15:
             self.closingAngle = 58
-        elif pin == 6:
+        elif pin == 6 or pin == 5:
             self.closingAngle = 55
         else:
             self.closingAngle = 60
@@ -314,9 +314,9 @@ class ControlTower():
     def readInstructions(self, home, inFile, outFile):
         print('Starting Simulation...')
 
-        with open(filename, "r") as simFile, open(outFile, "w") as outFile:
+        with open(inFile, "r") as simFile, open(outFile, "w") as outFile:
             # This gets the fieldnames for the output file and sets them.
-            time_header = "Time on " + strftime("%d %b %Y")
+            time_header = "Time"
             fieldnames = [time_header]
             fieldnames.extend(list(home.getApps()))
             fieldnames.extend(home.getDoors())
@@ -347,7 +347,7 @@ class ControlTower():
                 # This for loop goes through a single line, word by word, and parses it.
                 for i in range(0, lineLen, 2):
                     # If the first string in the line is a *, that means this is a
-                    # comment line. The loop skips over this line
+                     # comment line. The loop skips over this line
                     if splitLine[i] == '*':
                         break
                     # First we check if the current string refers to an appliance
@@ -376,7 +376,7 @@ class ControlTower():
                     # Finally, we check if the current string is a number. This
                     # number tells us how many seconds the house should remain
                     # in the current state
-                    if is_number(splitLine[i]):
+                    if self.is_number(splitLine[i]):
                         timeSkip = int(splitLine[i])
                         break
 
@@ -388,7 +388,19 @@ class ControlTower():
         print("\nEnd of simulation")
 
 
-    def main(self, filename):
+    # **side project** This function will "build" the house using a textfile with
+    # the specifications of everything in it.
+    def buildHouse(house):
+        # make house object
+        # open build house text file
+        # make and add all appliances
+        # make and add all doors and windows
+        # make all rooms and add doors and windows to them
+        return house
+
+
+
+    def main(self, inFile, outFile):
         en1=20
         en2=17
         # *** BUILDING THE HOUSE ***
@@ -396,8 +408,10 @@ class ControlTower():
         # no nickname needed, just use regular name when writing the test file
         lamp = Appliance("lamp", 5)
         heater = Appliance("heater", 6)
-        fan = Appliance("fan", 12)
+        fan = Appliance("fan", 18)
         ac = Appliance("ac", 13)
+        #motor1 drives the lamp back and forth. motor 2 controls the angle of the lamp
+        #Each motor has 2 pins and an enable connected to the motor driver then to the breadboard.
         motor1_p1 = Appliance("motor1_p1",19)
         motor1_p2 = Appliance("motor1_p2",16)
         motor1_en1 = Appliance("motor1_enable", en1)
@@ -420,7 +434,8 @@ class ControlTower():
 
         # --windows--
         # nicknaming convention: w + the initials of the door name. Example: wb1l
-        #                       is the -W-indow in -B-edroom -1- on the -L-eft side
+        #                        is the -W-indow in -B-edroom -1- on the -L-eft side
+        #                        Each major room has a left and right window.                          
         bed1_left = Hinge("Bedroom 1 Left Window", "wb1l", 8)
         living_left = Hinge("Living Room Left Window", "wll",  9)
         bed2_right = Hinge("Bedroom 2 Right Window", "wb2r", 10)
@@ -442,18 +457,51 @@ class ControlTower():
         # --house--
         scaledHome = Home(roomList, applianceList, doorList, windowList)
 
-        p1=GPIO.PWM(en1,1000)
-        p2=GPIO.PWM(en2,1000)
-        p1.start (30)
-        p2.start (30)
-        self.readInstructions(scaledHome, filename)
+        # *** CONTROLLING THE HOUSE ***
+        #bed1_left.openHinge()
+        #time.sleep(5)
+        #bed1_left.closeHinge()
+
+        #fan.turnOn()
+        #time.sleep(5)
+        #lamp.turnOff()
+
+        #scaledHome.openEverything()
+        #time.sleep(5)
+        #scaledHome.closeEverything()
+
+        self.readInstructions(scaledHome, inFile, outFile)
+
+        #print(scaledHome.getDoors())
 
         # Make sure to have GPIO.cleanup() at the end of the program to reset
         # all of the appliances before the program terminates.
         GPIO.cleanup()
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(6,GPIO.OUT)
+        GPIO.setup(13,GPIO.OUT)
+        p1=GPIO.PWM(en1,1000)
+        p2=GPIO.PWM(en2,1000)
+        p1.start (30)
+        p2.start (30)
+
+
+ 
 
 if __name__ == "__main__":
-    inFile = "simulation.txt"
-    outFile = "appliance_and_motor_states1.csv"
+    #inFile = "simulation_1_charlotte.txt"
+    #outFile = "appliance_and_motor_states1_charlotte.csv"
+
+    #inFile = "lamp_simulation.txt"
+    #outFile = "appliance_and_motor_states4.csv"
+
+    # inFile = "simulation3.txt"
+    # outFile = "appliance_and_motor_states3.csv"
+
+    # inFile = "simulation4.txt"
+    # outFile = "appliance_and_motor_states4.csv"
+
     start = ControlTower()
+    inFile = "demo_simulation.txt"
+    outFile = "demo_sim.csv"
     start.main(inFile, outFile)
