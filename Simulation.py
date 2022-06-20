@@ -260,6 +260,31 @@ class Hinge(Motor):
         self.state = 0
 
 
+class Sun(Motor):
+    def __init__(self,name,pin1,pin2,enable, duty):
+        super().__init__(self, name, pin1, pin2, enable)
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(pin1, GPIO.OUT)
+        GPIO.setup(pin2, GPIO.OUT)
+        GPIO.setup(enable, GPIO.OUT)
+
+     # These functions turn the appliance on and off.
+    def turnOn(self):
+        print('turning on ' + self.name + '...')
+        GPIO.output(self.pin, GPIO.HIGH)
+        p = GPIO.PWM(self.enable, 1000)
+        p.start(self.duty)
+        self.state = 1
+
+    def turnOff(self):
+        print('turning off ' + self.name + '...')
+        GPIO.output(self.pin, GPIO.LOW)
+        p = GPIO.PWM(self.enable, 1000)
+        p.start(self.duty)
+        self.state = 0
+
+
+
 # The Appliance class is for the appliances in the house that control the
 # temperature (i.e. the heater, lamp, etc.). It controls the on and off
 # mechanism.
@@ -401,8 +426,6 @@ class ControlTower():
 
 
     def main(self, inFile, outFile):
-        en1=20
-        en2=17
         # *** BUILDING THE HOUSE ***
         # --appliances--
         # no nickname needed, just use regular name when writing the test file
@@ -412,13 +435,9 @@ class ControlTower():
         ac = Appliance("ac", 13)
         #motor1 drives the lamp back and forth. motor 2 controls the angle of the lamp
         #Each motor has 2 pins and an enable connected to the motor driver then to the breadboard.
-        motor1_p1 = Appliance("motor1_p1",19)
-        motor1_p2 = Appliance("motor1_p2",16)
-        motor1_en1 = Appliance("motor1_enable", en1)
-        motor2_p1 = Appliance("motor2_p1",25)
-        motor2_p2 = Appliance("motor2_p2",24)
-        motor2_en2 = Appliance("motor2_enable", en2)
-        applianceList = [lamp, heater, fan, ac, motor1_p1, motor1_p2, motor2_p1, motor2_p2,motor1_en1,motor2_en2]
+        motor1 = Sun("motor1",19,16,20,90)
+        motor2 = Sun("motor2",25,24,17,30)
+        applianceList = [lamp, heater, fan, ac, motor1, motor2]
 
         # --doors--
         # nicknaming convention: d + the initials of the door name. Example: db2b
