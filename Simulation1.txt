@@ -1,0 +1,81 @@
+* Morning phase
+* Starting appliances
+lamp on 18
+ac on 18
+db1b open 18 
+wb1l open 18
+db1l open 18
+motor1_p1 off motor1_p2 on motor2_p1 on motor2_p2 off 1.5
+motor1_p1 off motor1_p2 off motor2_p1 off motor2_p2 off 1
+* parent 1 goes to kitchen and parent 2 goes to bedroom 2 to wake up the kids
+d1k open 12
+wkf open 12
+wkr open 12
+db2b open 12
+wb2b open 12
+wb2r open 12
+db2b close 12
+motor1_p1 off motor1_p2 on motor2_p1 on motor2_p2 off 1.5
+motor1_p1 off motor1_p2 off motor2_p1 off motor2_p2 off 1
+* parent 1 opens living room windows
+wll open 12
+wlf open 12
+* parent 2 and kids go back to bedroom 2 to get ready
+db2b open 12
+* family goes to dining and then the kids leave for school
+wkr close 12
+wkf close 12
+dlo open 10
+dlo close 10
+motor1_p1 off motor1_p2 on motor2_p1 on motor2_p2 off 1.5
+motor1_p1 off motor1_p2 off motor2_p1 off motor2_p2 off 1
+* parents go to bedroom 2 to get ready for work.
+* They close all windows and doors before leaving.
+ac off 1
+db1b close wb1l close db1l close d1k close 1
+wb2b close wb2r close wll close wlf close db2b close 30
+motor1_p1 off motor1_p2 on motor2_p1 on motor2_p2 off 1.5
+motor1_p1 off motor1_p2 off motor2_p1 off motor2_p2 off 60
+* parents leave for work and nobody is in the house till past noon
+* parent 1 and the kids are the first to comeback
+motor1_p1 off motor1_p2 on motor2_p1 on motor2_p2 off 1.5
+motor1_p1 off motor1_p2 off motor2_p1 off motor2_p2 off 1
+ac on 9
+dlo open 9
+dlo close 9
+dlb open 9
+db2b open 9
+* kids go to dining and parent 1 goes to bedroom 1
+db1b open 9
+db1l open 9
+dlk open 9
+wkf open 9
+wkr open 9
+motor1_p1 off motor1_p2 on motor2_p1 on motor2_p2 off 1.5
+motor1_p1 off motor1_p2 off motor2_p1 off motor2_p2 off 1
+* kids go back to bedroom 2 to do HW
+wb2b open 18
+wb2r open 18
+* parent 2 comes back
+db1o open 18
+db1o close 18
+db1l close 18
+motor1_p1 off motor1_p2 on motor2_p1 on motor2_p2 off 1.5
+motor1_p1 off motor1_p2 off motor2_p1 off motor2_p2 off 1
+* family has dinner and then sit in the living room
+wkf close 15
+wkr close 15
+dlk close 15
+motor1_p1 off motor1_p2 on motor2_p1 on motor2_p2 off 1.5
+motor1_p1 off motor1_p2 off motor2_p1 off motor2_p2 off 45
+* family goes to bathroom before bed
+dlb open 12
+db2b open 12
+dlb close 12
+db2b cloes 12
+motor1_p1 off motor1_p2 on motor2_p1 on motor2_p2 off 1.5
+motor1_p1 off motor1_p2 off motor2_p1 off motor2_p2 off 1
+* closing all doors and windows before sleeping
+dlb close db1b close 1
+ac off lamp off 1
+motor1_p1 off motor1_p2 off motor2_p1 off motor2_p2 off 1
