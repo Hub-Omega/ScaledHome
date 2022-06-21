@@ -211,6 +211,21 @@ class Room:
         return output
 
 
+
+class sunMotor:
+    def __init__(self,name,pin1,pin2,enable, duty):
+        self.name = name
+        self.pin1 = pin1
+        self.pin2 = pin2
+        self.enable = enable\
+        self.duty = duty
+        self.state = 0
+
+    def getState(self):
+        return self.state
+
+
+
 # The Motor class is a parent class for all the objects in the house that can be
 # controlled (i.e. doors, windows, and appliances).
 class Motor:
@@ -273,27 +288,27 @@ class Hinge(Motor):
         self.state = 0
 
 
-class Sun(Motor):
-    def __init__(self,name,pin1,pin2,enable, duty):
-        super().__init__(self, name, pin1, pin2, enable)
+class Sun(sunMotor):
+    def __init__(self,name,pin1,pin2,enable,duty):
+        super().__init__(name, pin1, pin2, enable, duty)
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(pin1, GPIO.OUT)
         GPIO.setup(pin2, GPIO.OUT)
         GPIO.setup(enable, GPIO.OUT)
+        GPIO.output(pin1,GPIO.LOW)
+        GPIO.output(pin2,GPIO.LOW)
+        p = GPIO.PWM(enable, 1000)
+        p.start(duty)
 
      # These functions turn the appliance on and off.
     def turnOn(self):
         print('turning on ' + self.name + '...')
         GPIO.output(self.pin, GPIO.HIGH)
-        p = GPIO.PWM(self.enable, 1000)
-        p.start(self.duty)
         self.state = 1
 
     def turnOff(self):
         print('turning off ' + self.name + '...')
         GPIO.output(self.pin, GPIO.LOW)
-        p = GPIO.PWM(self.enable, 1000)
-        p.start(self.duty)
         self.state = 0
 
 
@@ -359,6 +374,7 @@ class ControlTower():
             fieldnames.extend(list(home.getApps()))
             fieldnames.extend(home.getDoors())
             fieldnames.extend(home.getWindows())
+            fieldnames.extend(home.getSun())
             out_writer = csv.writer(outFile, delimiter = ',')
             out_writer.writerow(fieldnames)
 
@@ -391,7 +407,7 @@ class ControlTower():
                     if splitLine[i] == '*':
                         break
 
-                    # First we check if the current string refers to an appliance
+                    # First we check if the current string refers to a sun object
                     # and control it based on the command that follows it.
                     current = self.getObject(splitLine[i], sunsName, suns)
                     if current != None:
