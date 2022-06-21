@@ -16,11 +16,12 @@ kit = ServoKit(channels=16)
 # the windows and doors.
 class Home:
     name = 'SmartHomeModel'
-    def __init__(self, rooms, appliances, doors, windows):
+    def __init__(self, rooms, appliances, doors, windows, sun):
         self.rooms = rooms
         self.appliances = appliances
         self.doors = doors
         self.windows = windows
+        self.sun = sun 
 
 
     # These next few functions returns a list of the names of the different
@@ -52,6 +53,12 @@ class Home:
         for w in self.windows:
             wL.append(w.name)
         return wL
+
+    def getSun(self):
+        sL = []
+        for s in self.sun:
+            sL.append(s.name)
+        return sL
 
 
     # These next two functions returns the nicknames of the doors and windows.
@@ -85,6 +92,9 @@ class Home:
         # get window states
         for w in self.windows:
             states.append(w.getState())
+            # get sun states
+        for s in self.sun:
+            states.append(s.getState())
         return states
 
 
@@ -104,6 +114,9 @@ class Home:
 
     def addAppliance(self, newApp):
         self.appliances.append(newApp)
+
+    def addSun(self, newSun):
+        self.sun.append(newSun)
 
 
     # These next few functions control large scale operations of the house.
@@ -357,6 +370,8 @@ class ControlTower():
             apps = home.appliances
             doors = home.doors
             windows = home.windows
+            sunsName= home.getSun()
+            suns = home.sun
             timeSkip = 0
 
             # The initial state of the house is collected before anything is turned on or opened
@@ -375,7 +390,19 @@ class ControlTower():
                      # comment line. The loop skips over this line
                     if splitLine[i] == '*':
                         break
+
                     # First we check if the current string refers to an appliance
+                    # and control it based on the command that follows it.
+                    current = self.getObject(splitLine[i], sunsName, suns)
+                    if current != None:
+                        if splitLine[i + 1] == "on":
+                            current.turnOn()
+                        elif splitLine[i + 1] =="off":
+                            current.turnOff()
+                        else:
+                            pdb.set_trace()
+                            print("Invalid input on word " + str(i) + " in the following line: " + line + "\t" + splitLine[i])
+                    # Then we check if the current string refers to an appliance
                     # and control it based on the command that follows it.
                     current = self.getObject(splitLine[i], appsName, apps)
                     if current != None:
@@ -433,11 +460,13 @@ class ControlTower():
         heater = Appliance("heater", 6)
         fan = Appliance("fan", 18)
         ac = Appliance("ac", 13)
+        applianceList = [lamp, heater, fan, ac]
+
         #motor1 drives the lamp back and forth. motor 2 controls the angle of the lamp
         #Each motor has 2 pins and an enable connected to the motor driver then to the breadboard.
         motor1 = Sun("motor1",19,16,20,90)
         motor2 = Sun("motor2",25,24,17,30)
-        applianceList = [lamp, heater, fan, ac, motor1, motor2]
+        sunList = [motor1, motor2]
 
         # --doors--
         # nicknaming convention: d + the initials of the door name. Example: db2b
@@ -474,7 +503,7 @@ class ControlTower():
         roomList = [bed1, bed2, bath, living, kitchen]
 
         # --house--
-        scaledHome = Home(roomList, applianceList, doorList, windowList)
+        scaledHome = Home(roomList, applianceList, doorList, windowList, sunList)
 
         # *** CONTROLLING THE HOUSE ***
         #bed1_left.openHinge()
@@ -496,13 +525,13 @@ class ControlTower():
         # Make sure to have GPIO.cleanup() at the end of the program to reset
         # all of the appliances before the program terminates.
         GPIO.cleanup()
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setup(6,GPIO.OUT)
-        GPIO.setup(13,GPIO.OUT)
-        p1=GPIO.PWM(en1,1000)
-        p2=GPIO.PWM(en2,1000)
-        p1.start (30)
-        p2.start (30)
+        # GPIO.setmode(GPIO.BCM)
+        # GPIO.setup(6,GPIO.OUT)
+        # GPIO.setup(13,GPIO.OUT)
+        # p1=GPIO.PWM(en1,1000)
+        # p2=GPIO.PWM(en2,1000)
+        # p1.start (30)
+        # p2.start (30)
 
 
  
@@ -521,6 +550,6 @@ if __name__ == "__main__":
     # outFile = "appliance_and_motor_states4.csv"
 
     start = ControlTower()
-    inFile = "demo_simulation.txt"
+    inFile = "Scenario.txt"
     outFile = "demo_sim.csv"
     start.main(inFile, outFile)
