@@ -1,0 +1,12 @@
+def convertToSimulationTime(time: str) -> float:
+  '''
+  The simulated time : real time ratio in seconds is 1:45 
+  The format for real time (time read in) is in 24 hour format, HH:MM 
+  The digits before the ':' are the hours, the following digits are the minutes
+  Starts day from 00:00
+  '''
+  militaryTime = time.split(':')
+  parse = [int(digit) for digit in militaryTime]
+  total_time = (parse[0]*3600 + parse[1]*60) // 45
+  return total_time
+print(convertToSimulationTime("1:00"))
