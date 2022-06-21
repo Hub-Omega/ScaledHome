@@ -217,7 +217,7 @@ class sunMotor:
         self.name = name
         self.pin1 = pin1
         self.pin2 = pin2
-        self.enable = enable\
+        self.enable = enable
         self.duty = duty
         self.state = 0
 
