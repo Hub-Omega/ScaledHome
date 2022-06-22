@@ -1,0 +1,35 @@
+import csv
+import pandas as pd
+import time
+
+def parseCSV(csv: str):
+  startTimes = pd.read_csv(csv, usecols = ['Objects','on_time'])
+  endTimes = pd.read_csv(csv, usecols = ['Objects','off_time'])
+  startTimes.rename(columns = {'on_time' : 'time'}, inplace = True)
+  endTimes.rename(columns = {'off_time' : 'time'}, inplace = True)
+  events = startTimes.append(endTimes, ignore_index=True)
+  time = pd.DataFrame(data = None)
+  for event in events:
+    time.append(convertToSimulationTime(event[1]))
+  events['time'] = time['time']
+  events.sort_values('time')
+  obj = allObjects[events[0]]
+  pd.DataFrame(data = obj)
+  events['Objects'] = obj['Objects']
+  return events
+
+def ControlTower():
+  sim = parseCSV('Scenario.csv')
+  startTime = time.time()
+  counter = 0
+  while(True):
+    timestamp = time.time()
+    delta = int(timestamp - startTime)
+    if (delta == convertToSimulationTime(sim[counter][1])):
+      if (sim[counter][0]):
+        sim[counter][0].turnOff()
+        sim[counter][0].state = 0
+      else:
+        sim[counter][0].turnOn()
+        sim[counter][0].state = 1
+      counter += 1
