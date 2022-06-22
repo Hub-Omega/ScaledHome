@@ -215,15 +215,14 @@ class Room:
 class sunMotor:
     def __init__(self,name,pin1,pin2,enable, duty):
         self.name = name
-        self.pin1 = pin1
-        self.pin2 = pin2
-        self.enable = enable
-        self.duty = duty
+        self.pin1 = int(pin1)
+        self.pin2 = int(pin2)
+        self.enable = int(enable)
+        self.duty = int(duty)
         self.state = 0
 
     def getState(self):
         return self.state
-
 
 
 # The Motor class is a parent class for all the objects in the house that can be
@@ -297,18 +296,18 @@ class Sun(sunMotor):
         GPIO.setup(enable, GPIO.OUT)
         GPIO.output(pin1,GPIO.LOW)
         GPIO.output(pin2,GPIO.LOW)
-        p = GPIO.PWM(enable, 1000)
-        p.start(duty)
+        self.p = GPIO.PWM(enable, 1000)
+        self.p.start(duty)
 
      # These functions turn the appliance on and off.
     def turnOn(self):
         print('turning on ' + self.name + '...')
-        GPIO.output(self.pin, GPIO.HIGH)
+        GPIO.output(self.pin1, GPIO.HIGH)
         self.state = 1
 
     def turnOff(self):
         print('turning off ' + self.name + '...')
-        GPIO.output(self.pin, GPIO.LOW)
+        GPIO.output(self.pin1, GPIO.LOW)
         self.state = 0
 
 
@@ -337,134 +336,9 @@ class Appliance(Motor):
 
 # The ControlTower class is where everything is built and controlled from.
 class ControlTower():
-
-    # This function takes a number and returns true if it is an integer or a float.
-    def is_number(self, num):
-        if num.isnumeric():
-            return True
-        else:
-            try:
-                float(num)
-                return True
-            except ValueError:
-                return False
-
-    # This function takes the nickname of an object, a list of nicknames, and a
-    # list of objects that correspond to the nicknames. It will return the object
-    # that matches the nickname it is passed from the input file if it finds it.
-    # Otherwise it returns None.
-    def getObject(self, name, listOfNames, listOfObjects):
-        try:
-            index = listOfNames.index(name)
-            return listOfObjects[index]
-        except ValueError:
-            return None
-
-    # This function takes in a home that has already been built and runs a simulation
-    # on the house. It reads commands from a text file and executes them accordingly.
-    # After each line in the input file, it outputs the states of all the motors
-    # to an output csv file to be examined and analyzed later.
-    def readInstructions(self, home, inFile, outFile):
-        print('Starting Simulation...')
-
-        with open(inFile, "r") as simFile, open(outFile, "w") as outFile:
-            # This gets the fieldnames for the output file and sets them.
-            time_header = "Time"
-            fieldnames = [time_header]
-            fieldnames.extend(list(home.getApps()))
-            fieldnames.extend(home.getDoors())
-            fieldnames.extend(home.getWindows())
-            fieldnames.extend(home.getSun())
-            out_writer = csv.writer(outFile, delimiter = ',')
-            out_writer.writerow(fieldnames)
-
-            # Here we save the lists of names/nicknames along with the list of the
-            # corresponding objects to save time in the loop below.
-            appsName = home.getApps()
-            doorsName = home.getDoorNicknames()
-            windowsName = home.getWindowNicknames()
-            apps = home.appliances
-            doors = home.doors
-            windows = home.windows
-            sunsName= home.getSun()
-            suns = home.sun
-            timeSkip = 0
-
-            # The initial state of the house is collected before anything is turned on or opened
-            out_writer.writerow(home.getStates())
-
-            # This for loop goes line by line in the input file. It splits each line into
-            # a list of strings and starts the for loop to go through each string.
-            for line in simFile:
-                splitLine = line.strip().lower().split()
-                i = 0
-                current = None
-                lineLen = len(splitLine)
-                # This for loop goes through a single line, word by word, and parses it.
-                for i in range(0, lineLen, 2):
-                    # If the first string in the line is a *, that means this is a
-                     # comment line. The loop skips over this line
-                    if splitLine[i] == '*':
-                        break
-
-                    # First we check if the current string refers to a sun object
-                    # and control it based on the command that follows it.
-                    current = self.getObject(splitLine[i], sunsName, suns)
-                    if current != None:
-                        if splitLine[i + 1] == "on":
-                            current.turnOn()
-                        elif splitLine[i + 1] =="off":
-                            current.turnOff()
-                        else:
-                            pdb.set_trace()
-                            print("Invalid input on word " + str(i) + " in the following line: " + line + "\t" + splitLine[i])
-                    # Then we check if the current string refers to an appliance
-                    # and control it based on the command that follows it.
-                    current = self.getObject(splitLine[i], appsName, apps)
-                    if current != None:
-                        if splitLine[i + 1] == "on":
-                            current.turnOn()
-                        elif splitLine[i + 1] =="off":
-                            current.turnOff()
-                        else:
-                            pdb.set_trace()
-                            print("Invalid input on word " + str(i) + " in the following line: " + line + "\t" + splitLine[i])
-                    # Then we check if the current string refers to a door or window
-                    # and control it based on the command that follows it.
-                    current = self.getObject(splitLine[i], doorsName, doors)
-                    if current == None:
-                        current = self.getObject(splitLine[i], windowsName, windows)
-                    if current != None:
-                        if splitLine[i + 1] == "open":
-                            current.openHinge()
-                        elif splitLine[i + 1] == "close":
-                            current.closeHinge()
-                        else:
-                            print("Invalid input on word " + str(i) + " in the following line: " + line + "\t" + splitLine[i])
-                    # Finally, we check if the current string is a number. This
-                    # number tells us how many seconds the house should remain
-                    # in the current state
-                    if self.is_number(splitLine[i]):
-                        timeSkip = int(splitLine[i])
-                        break
-
-                # At the end of each line we output the state of all the motors
-                # in the house and wait for the amount of time specified in the line.
-                out_writer.writerow(home.getStates())
-                time.sleep(timeSkip)
-
-        print("\nEnd of simulation")
-
-
-    # **side project** This function will "build" the house using a textfile with
-    # the specifications of everything in it.
-    def buildHouse(house):
-        # make house object
-        # open build house text file
-        # make and add all appliances
-        # make and add all doors and windows
-        # make all rooms and add doors and windows to them
-        return house
+    commandList = {}
+    with open(filename, "r") as simFile, open(outFile, "w") as outFile:
+        csvFile = csv.reader(simFile)
 
 
 
@@ -476,13 +350,13 @@ class ControlTower():
         heater = Appliance("heater", 6)
         fan = Appliance("fan", 18)
         ac = Appliance("ac", 13)
-        applianceList = [lamp, heater, fan, ac]
+        applianceDict = {'lamp': lamp, 'heater':heater, 'fan':fan, 'ac':ac}
 
         #motor1 drives the lamp back and forth. motor 2 controls the angle of the lamp
         #Each motor has 2 pins and an enable connected to the motor driver then to the breadboard.
         motor1 = Sun("motor1",19,16,20,90)
         motor2 = Sun("motor2",25,24,17,30)
-        sunList = [motor1, motor2]
+        sunDict = {'motor1':motor1, 'motor2':motor2}
 
         # --doors--
         # nicknaming convention: d + the initials of the door name. Example: db2b
@@ -494,7 +368,7 @@ class ControlTower():
         bed1_bath = Hinge("Bedroom 1 to Bathroom", "db1b", 4)
         living_outside = Hinge("Living Room to Outside", "dlo", 5)
         bed1_outside = Hinge("Bedroom 1 to Outside", "db1o", 6)
-        doorList = [bed2_bath, bed1_living, living_kitchen, living_bath, bed1_bath, living_outside, bed1_outside]
+        doorDict = {'db2b':bed2_bath, 'db1l':bed1_living, 'dlk':living_kitchen, 'dlb':living_bath,'db1b':bed1_bath,'dlo':living_outside,'db1o':bed1_outside}
 
         # --windows--
         # nicknaming convention: w + the initials of the door name. Example: wb1l
@@ -508,18 +382,19 @@ class ControlTower():
         living_front = Hinge("Living Room Front Window", "wlf", 13)
         kitchen_front = Hinge("Kitchen Front Window", "wkf", 14)
         bed1_back = Hinge("Bedroom 1 Back Window", "wb1b", 15)
-        windowList = [bed1_left, living_left, bed2_right, kitchen_right, bed2_back, living_front, kitchen_front, bed1_back]
-
+        windowDict = {'wb1l':bed1_left, 'wll':living_left,'wb2r':bed2_right,'wkr':kitchen_right,'wb2b':bed2_back,'wlf':living_front, 'wkf':kitchen_front,'wb1b':bed1_back}
         # --rooms--
         bed1 = Room("Bedroom 1", [bed1_living, bed1_bath, bed1_outside], [bed1_left, bed1_back])
         bed2 = Room("Bedroom 2", [bed2_bath], [bed2_right, bed2_back])
         bath = Room("Bathroom", [bed2_bath, living_bath, bed1_bath], [])
         living = Room("Living Room", [bed1_living, living_kitchen, living_bath, living_outside], [living_left, living_front])
         kitchen = Room("Kitchen", [living_kitchen], [kitchen_right, kitchen_front])
-        roomList = [bed1, bed2, bath, living, kitchen]
+        roomDict = {'Bedroom 1':bed1,'Bedroom 2':bed2, 'Bathroom':bath,'Living Room':living,'Kitchen':kitchen}
 
+        # a dictionary for every object to be able to look them up when reading the Scenario file
+        allObjects = {'lamp': lamp, 'heater':heater, 'fan':fan, 'ac':ac,'motor1':motor1, 'motor2':motor2,'db2b':bed2_bath, 'db1l':bed1_living, 'dlk':living_kitchen, 'dlb':living_bath,'db1b':bed1_bath,'dlo':living_outside,'db1o':bed1_outside,'wb1l':bed1_left, 'wll':living_left,'wb2r':bed2_right,'wkr':kitchen_right,'wb2b':bed2_back,'wlf':living_front, 'wkf':kitchen_front,'wb1b':bed1_back}        
         # --house--
-        scaledHome = Home(roomList, applianceList, doorList, windowList, sunList)
+        scaledHome = Home(roomDict, applianceDict, doorDict, windowDict, sunDict)
 
         # *** CONTROLLING THE HOUSE ***
         #bed1_left.openHinge()
