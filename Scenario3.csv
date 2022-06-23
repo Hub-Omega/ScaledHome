@@ -2,30 +2,22 @@ objects,on_time,off_time,notes
 lamp,5:00,20:45,sunrise and sunset
 ac,5:30,7:30,
 db1b,6:30,7:00,parent 1 wakes up and takes a shower
-wb1l,7:10,10:00,
-db1b,7:20,7:50,parent 2 wakes up and takes a shower
-db1l,8:00,10:00,
-dlk,8:10,10:00,parent 1 goes to prep breakfast
-wkf,8:15,10:00,
-wkr,8:20,10:00,
-db2b,8:25,10:00,parent 2 wakes the kids up
-wb2b,8:30,10:00,
-wb2r,8:30,10:00,
-wll,8:40,10:00,parent 1 opens living room windows
-wlf,8:42,10:00,
+wb1l,7:10,20:00,all windows are left open because the parents were rushing to work
+db1b,7:20,20:00,parent 2 wakes up and takes a shower
+db1l,8:00,20:00,all doors are left open because parents were rushing to work
+dlk,8:10,20:00,parent 1 goes to prep breakfast
+wkf,8:15,20:00,
+wkr,8:20,20:00,
+db2b,8:25,20:00,parent 2 wakes the kids up
+wb2b,8:30,20:00,
+wb2r,8:30,20:00,
+wll,8:40,20:00,parent 1 opens living room windows
+wlf,8:42,20:00,
 dlo,9:15,9:20,kids leave for school
 ac,8:00,10:00,parents leave for work at 10
 ac,16:00,18:00,parent 1 and the kids come back home
 dlo,16:10,16:20,
 dlb,16:20,20:00,kids go change
-db2b,16:25,20:00,
-db1b,16:30,20:00,parent changes and then goes to the kitchen
-db1l,16:35,20:00,
-dlk,16:50,20:00,
-wkf,17:00,20:00,
-wkr,17:05,20:00,
-wb2b,17:30,20:00,kids go do their HW
-wb2r,17:35,20:00,
 db1o,18:00,18:10,parent 2 comes back from work
 ac,19:00,21:00,family had dinner and will be in the living room at 20:00
 dlb,22:00,22:30,
