@@ -8,6 +8,8 @@ import RPi.GPIO as GPIO
 from datetime import datetime
 from time import strftime
 import pdb
+from collections import defaultdict
+import pandas as pd
 
 kit = ServoKit(channels=16)
 
@@ -336,9 +338,53 @@ class Appliance(Motor):
 
 # The ControlTower class is where everything is built and controlled from.
 class ControlTower():
-    commandList = {}
-    with open(filename, "r") as simFile, open(outFile, "w") as outFile:
-        csvFile = csv.reader(simFile)
+    def convertToSimulationTime(self, time: str) -> float:
+        '''
+        The simulated time : real time ratio in seconds is 1:45 
+        The format for real time (time read in) is in 24 hour format, HH:MM 
+        The digits before the ':' are the hours, the following digits are the minutes
+        Starts day from 00:00
+        '''
+        militaryTime = time.split(':')
+        parse = [int(digit) for digit in militaryTime]
+        total_time = (parse[0]*3600 + parse[1]*60) // 45
+        return total_time
+        # print(convertToSimulationTime("20:45"))
+    
+
+    def parse(self, csv):
+        df = pd.read_csv(csv)
+        column_names = ["object", "time"]
+        new_df = pd.DataFrame(columns = column_names)
+        for index, row in df.iterrows():
+            new_df.loc[len(new_df.index)] = [row['objects'], row['on_time']]
+            new_df.loc[len(new_df.index)] = [row['objects'], row['off_time']]
+        
+
+        for index, row in new_df.iterrows():
+            new_df.at[index,'time'] = self.convertToSimulationTime(new_df.at[index,'time'])
+        new_df.sort_values(by=['time'], inplace=True)
+        return new_df
+
+    def parseDict(self, df):
+        events = defaultdict(list)
+        [events[row['time']].append(row['object']) for index, row in df.iterrows()]
+        return events
+
+    def time_to_switch(self, events):
+        start_time = time.time()
+        while(len(events) > 0):
+            curr_time = int(time.time() - start_time)
+            if curr_time in events.keys():
+                self.switchState(events[curr_time])
+                events.pop(curr_time)
+
+    def switchState(self, list_of_objects):
+        for object in list_of_objects:
+            if (object.getState()):
+                object.turnOff
+            else:
+                object.turnOn
 
 
 
@@ -409,7 +455,10 @@ class ControlTower():
         #time.sleep(5)
         #scaledHome.closeEverything()
 
-        self.readInstructions(scaledHome, inFile, outFile)
+        df = self.parse('Scenario1.csv')
+        events = self.parseDict(df)
+        self.time_to_switch(events)
+
 
         #print(scaledHome.getDoors())
 
