@@ -1,0 +1,63 @@
+objects,on_time,off_time,notes
+lamp,5:00,20:45,sunrise and sunset
+dlo,5:20,5:25,parent 1 takes the dog for a walk
+dlo,5:45,5:50,parent 1 comes back 
+db1b,6:00,6:15,parent 1 takes a shower
+db1b,6:30,7:00,parent 2 wakes up and takes a shower
+db1l,8:00,10:00,"some of the doors will be left open till the family hangout in the living room, so that the dog can move around the house freely."
+dlk,8:10,20:00,parent 1 goes to prep breakfast
+wkf,8:15,20:00,parents forgot the kitchen windows open
+wkr,8:20,20:00,
+db2b,8:25,10:00,parent 2 wakes the kids up
+wb2b,8:30,10:00,
+wb2r,8:30,10:00,
+wll,8:40,10:00,parent 1 opens living room windows
+wlf,8:42,10:00,
+dlo,9:15,9:20,kids leave for school
+dlo,9:50,9:55,parents leave for work
+dlo,16:10,16:20,parent 1 and kids come back
+dlb,16:20,20:00,kids go change
+db2b,16:25,20:00,
+db1b,16:30,20:00,parent changes and then goes to the kitchen
+wb2r,17:35,20:00,
+db1o,18:00,18:10,parent 2 comes back from work
+dlb,22:00,22:30,
+db2b,22:00,22:40,
+motor1,6:00,6:11,first stop
+motor2,6:00,6:01,
+motor1,7:00,7:11,second
+motor2,7:00,7:01,
+motor1,8:00,8:11,third
+motor2,8:00,8:01,
+motor1,9:00,9:11,fourth
+motor2,9:00,9:01,
+motor1,10:00,10:11,fifth
+motor2,10:00,10:01,
+motor1,11:00,11:11,sixth
+motor2,11:00,11:01,
+motor1,12:00,12:11,seventh
+motor2,12:00,12:01,
+motor1,13:00,13:11,eighth
+motor2,13:00,13:01,
+motor1,14:00,14:11,ninth
+motor2,14:00,14:01,
+motor1,15:00,15:11,tenth
+motor2,15:00,15:01,
+motor1,16:00,16:11,eleventh
+motor2,16:00,16:01,
+motor1,17:00,17:11,twelfth
+motor2,17:00,17:01,
+motor1,18:00,18:11,thirteenth
+motor2,18:00,18:01,
+motor1,19:00,19:11,fourteenth
+motor2,19:00,19:01,
+motor1,20:00,20:11,fifteenth
+motor2,20:00,20:01,
+ac,5:20,6:00,
+ac,7:00,8:00,
+ac,9:00,10:00,
+ac,12:00,1:00,
+ac,15:00,17:00,
+ac,18:00,19:00,
+ac,20:00,21:00,
+ac,22:00,23:00,
