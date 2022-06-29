@@ -1,5 +1,6 @@
 objects,on_time,off_time,notes
 lamp,5:00,20:45,sunrise and sunset
+wkf,5:30,23:00,this window has to remain open the entire time so that the ac can be effective
 ac,5:30,7:30,it's a Saturday and the family is going to the beach and then holding a party at the house later
 db1b,9:00,9:10,parent 1 wakes up and uses the bathroom 
 wb1l,9:10,11:00,
@@ -7,7 +8,6 @@ ac,8:00,10:00,
 db1b,9:30,9:40,parent 2 wakes up and uses the bathroom
 db1l,9:45,11:00,
 dlk,9:50,11:00,parent 1 goes to prep food and snacks for the beach
-wkf,9:55,11:00,
 wkr,9:56,11:00,
 db2b,10:00,11:00,parent 2 wakes the kids up
 wb2b,10:05,11:00,
@@ -41,7 +41,6 @@ dlk,16:30,20:00,parent changes and then goes to the kitchen
 dlb,23:50,0:20,family getting ready for bed
 db2b,0:30,0:33,
 db1b,0:30,0:35,
-wkf,17:40,23:40,
 wkr,17:40,23:40,
 motor1,6:00,6:11,first stop
 motor2,6:00,6:01,
