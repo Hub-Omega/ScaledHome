@@ -1,12 +1,12 @@
 objects,on_time,off_time,notes
 lamp,5:00,20:45,sunrise and sunset
+wkf,5:25,23:00,this window needs be open the entire time so that the ac can be effective
 ac,5:30,7:30,
 db1b,6:30,7:00,parent 1 wakes up and takes a shower
 wb1l,7:10,10:00,
 db1b,7:20,7:50,parent 2 wakes up and takes a shower
 db1l,8:00,10:00,
 dlk,8:10,10:00,parent 1 goes to prep breakfast
-wkf,8:15,10:00,
 wkr,8:20,10:00,
 db2b,8:25,10:00,parent 2 wakes the kids up
 wb2b,8:30,10:00,
@@ -22,7 +22,6 @@ db2b,16:25,20:00,
 db1b,16:30,20:00,parent changes and then goes to the kitchen
 db1l,16:35,20:00,
 dlk,16:50,20:00,
-wkf,17:00,20:00,
 wkr,17:05,20:00,
 wb2b,17:30,20:00,kids go do their HW
 wb2r,17:35,20:00,
