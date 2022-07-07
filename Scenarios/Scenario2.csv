@@ -1,8 +1,9 @@
 objects,on_time,off_time,notes
 lamp,5:00,20:45,sunrise and sunset
-wkf,5:30,23:00,this window has to remain open the entire time so that the ac can be effective
+wb1b,5:30,23:00,this window has to remain open the entire time so that the ac can be effective
 dlo,5:20,5:25,parent 1 takes the dog for a walk
 dlo,5:45,5:50,parent 1 comes back 
+wb1b,5:25,21:00,
 db1b,6:00,6:15,parent 1 takes a shower
 ac,5:30,7:30,
 db1b,6:30,7:00,parent 2 wakes up and takes a shower

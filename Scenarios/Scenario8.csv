@@ -1,6 +1,6 @@
 objects,on_time,off_time,notes
 lamp,5:00,20:45,sunrise and sunset. The ac broke for the entire day
-wkf,5:30,23:00,this window has to remain open the entire time so that the ac can be effective
+wb1b,5:30,23:00,this window has to remain open the entire time so that the ac can be effective
 dlo,5:20,5:25,parent 1 takes the dog for a walk
 dlo,5:45,5:50,parent 1 comes back 
 db1b,6:00,6:15,parent 1 takes a shower
@@ -18,33 +18,33 @@ dlo,9:15,9:20,kids leave for school
 dlo,9:50,9:55,parents leave for work
 dlo,16:10,16:20,parent 1 and kids come back
 db1o,18:00,18:10,parent 2 comes back from work
-motor1,6:00,6:11,first stop
+motor1,6:00,6:09,first stop
 motor2,6:00,6:01,
-motor1,7:00,7:11,second
+motor1,7:00,7:09,second
 motor2,7:00,7:01,
-motor1,8:00,8:11,third
+motor1,8:00,8:09,third
 motor2,8:00,8:01,
-motor1,9:00,9:11,fourth
+motor1,9:00,9:09,fourth
 motor2,9:00,9:01,
-motor1,10:00,10:11,fifth
+motor1,10:00,10:09,fifth
 motor2,10:00,10:01,
-motor1,11:00,11:11,sixth
+motor1,11:00,11:09,sixth
 motor2,11:00,11:01,
-motor1,12:00,12:11,seventh
+motor1,12:00,12:09,seventh
 motor2,12:00,12:01,
-motor1,13:00,13:11,eighth
+motor1,13:00,13:09,eighth
 motor2,13:00,13:01,
-motor1,14:00,14:11,ninth
+motor1,14:00,14:09,ninth
 motor2,14:00,14:01,
-motor1,15:00,15:11,tenth
+motor1,15:00,15:09,tenth
 motor2,15:00,15:01,
-motor1,16:00,16:11,eleventh
+motor1,16:00,16:09,eleventh
 motor2,16:00,16:01,
-motor1,17:00,17:11,twelfth
+motor1,17:00,17:09,twelfth
 motor2,17:00,17:01,
-motor1,18:00,18:11,thirteenth
+motor1,18:00,18:09,thirteenth
 motor2,18:00,18:01,
-motor1,19:00,19:11,fourteenth
+motor1,19:00,19:09,fourteenth
 motor2,19:00,19:01,
-motor1,20:00,20:11,fifteenth
+motor1,20:00,20:09,fifteenth
 motor2,20:00,20:01,
